@@ -1,0 +1,118 @@
+<div class="fixActionRow">
+    <mat-toolbar class="dialog-header">
+        <span class="no-overflow"> Device Detail </span>
+        <button mat-icon-button [mat-dialog-close]
+            matTooltip="Close"
+            aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card class="data-table-container">
+                    <mat-card-title class="card-title" >
+                        Detail
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div class="row" style="padding-top: 20px;">
+                            <div class="col-md-4">
+                                <div><b>Mac address: </b>{{ device.mac_address }}</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div><b>Location: </b>{{ device.location }}</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div><b>Parent location: </b>{{ device.parent_location }}</div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 20px;">
+                            <div class="col-md-4">
+                                <div *ngIf="device.connected"><b>Connected: </b> <i class="fas fa-check"  style="color: green;"></i></div>
+                                <div *ngIf="!device.connected"><b>Connected: </b> <i class="fas fa-times"  style="color: red;"></i></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div *ngIf="device.signal > 0"><b>Signal: </b> <i class="fas fa-signal"  style="color: green;"></i> ( {{ device.signal }} )</div>
+                                <div *ngIf="device.signal <= 0 && device.signal > -30" ><b>Signal: </b> <i class="fas fa-signal" style="color: orange;"></i> ( {{ device.signal }} )</div>
+                                <div *ngIf="device.signal <= -30"><b>Signal: </b> <i class="fas fa-signal" style="color: red;"></i> ( {{ device.signal }} )</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div><b>Updated at: </b>{{ device.updated_at | date:'medium' }}</div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card class="data-table-container">
+                    <mat-card-title class="card-title" >
+                        Devices in same location
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div class="col-md-12" class="data-table-container">
+                            
+                            <div>
+                                <div class="table-responsive-md">
+                                    <mat-table class="table" [dataSource]="devicesSource" matSort matSortActive="mac_address"
+                                        matSortDirection="asc" matSortDisableClear>
+
+                                        <!-- Row definitions -->
+                                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                        <mat-row [hidden]="isLoading" *matRowDef="let element; let i = index; columns: displayedColumns;" id="{{element.id}}">
+                                        </mat-row>
+                    
+                                        <!-- Column definitions -->
+                                        <ng-container matColumnDef="connected">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header class="d-none d-sm-block">Connected</mat-header-cell>
+                                            <mat-cell *matCellDef="let element; let i = index;" class="d-none d-sm-block">
+                                                <!-- <span>{{element.connected}}</span> -->
+                                                <span *ngIf="element.connected"><i class="fas fa-check"  style="color: green;"></i></span>
+                                                <span *ngIf="!element.connected"><i class="fas fa-times"  style="color: red;"></i></span>
+                                            </mat-cell>
+                                        </ng-container>
+                    
+                                        <ng-container matColumnDef="mac_address">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header > Mac address
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let element; let i = index;" >
+                                                <span>{{element.mac_address}}</span>
+                                            </mat-cell>
+                                        </ng-container>
+                    
+                                        <ng-container matColumnDef="updated_at">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header class="d-none d-md-block"> Updated At
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let element; let i = index;" class="d-none d-md-block">
+                                                <span>{{element.updated_at | date:'medium' }}</span>
+                                            </mat-cell>
+                                        </ng-container>
+                    
+                                    </mat-table>
+                                </div>
+                            </div>
+
+                            <div class="no-record-table" *ngIf="!isLoading && itemsDevicesLength === 0">
+                                <span>No devices found in same location.</span>
+                            </div>
+
+                            <div class="spinner-container" *ngIf="isLoading">
+                                <mat-spinner class="loading-spinner"></mat-spinner>
+                            </div>
+
+                            <div class="datatable-footer" [hidden]="isLoading">
+                                <mat-paginator [length]="itemsDevicesLength" (page)="setPaginatorValue($event)"
+                                    [pageSize]="paginatorValue.pageSize" [pageIndex]="paginatorValue.pageIndex"
+                                    [pageSizeOptions]="devicesPageOptions" [showFirstLastButtons]="true"></mat-paginator>
+                            </div>
+                    
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+

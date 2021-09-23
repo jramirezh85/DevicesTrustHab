@@ -1,0 +1,114 @@
+<div class="row text-center">
+    <h2>Devices List</h2>
+</div>
+<div class="row">
+    <div class="col-md-12" class="data-table-container">
+        <div class="data-table-header">
+            <form [formGroup]="filterForm">
+                <div class="filters-panel-inner" (click)="$event.stopPropagation()">
+                    <div class="row justify-content-center">
+                        
+                        <div class="col-md-2" style="padding-top: 20px;">
+                            <button class="primary-action-buttons float-end" color="primary" mat-icon-button
+                                matTooltip="Apply filter" (click)="onFilterChange()"
+                                aria-label="Apply filter">
+                                <i class="fas fa-search" style="margin-left: 10px;"></i>
+                            </button>
+                            <button *ngIf="thereAreFilters" class="primary-action-buttons float-end" color="warn" mat-icon-button
+                                matTooltip="Clear filter" (click)="filterForm.reset();onFilterClear()"
+                                aria-label="Clear filter">
+                                <i class="fas fa-eraser"></i>
+                            </button>
+                            <mat-spinner *ngIf="isLoading" diameter="18"
+                                    style="display: inline-block; margin-left: 10px; top: 4px;"></mat-spinner>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field appearance="standard" class="full-width">
+                                <mat-label>Location</mat-label>
+                                <input matInput placeholder="Location" formControlName="location">
+                                <mat-error *ngIf="filterForm.get('location')?.hasError('pattern')"> Only numbers. </mat-error>
+                                <mat-error *ngIf="filterForm.get('location')?.hasError('maxlength')"> Maximum 3 characters. </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field appearance="standard" class="full-width">
+                                <mat-label>Parent location</mat-label>
+                                <input matInput placeholder="Parent location" formControlName="parentLocation">
+                                <mat-error *ngIf="filterForm.get('parentLocation')?.hasError('pattern')"> Only numbers. </mat-error>
+                                <mat-error *ngIf="filterForm.get('parentLocation')?.hasError('maxlength')"> Maximum 3 characters. </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2" style="display:inline-block; margin-top: 28px;">
+                            <mat-slide-toggle color="accent" formControlName="connected">Connected
+                            </mat-slide-toggle>
+                        </div>
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <div class="table-responsive-md">
+                <mat-table class="table" [dataSource]="devicesSource" matSort matSortActive="updated_at"
+                    matSortDirection="asc" matSortDisableClear (matSortChange)="getDevices()">
+                    <!-- Row definitions -->
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row [hidden]="isLoading" *matRowDef="let element; let i = index; columns: displayedColumns;" id="{{element.id}}">
+                    </mat-row>
+
+                    <!-- Column definitions -->
+                    <ng-container matColumnDef="connected">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Connected</mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;">
+                            <span *ngIf="element.connected"><i class="fas fa-check"  style="color: green;"></i></span>
+                            <span *ngIf="!element.connected"><i class="fas fa-times"  style="color: red;"></i></span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="location">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="d-none d-md-block"> Location
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;" class="d-none d-md-block">
+                            <span>{{element.location}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="updated_at">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="d-none d-sm-block"> Updated At
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;" class="d-none d-sm-block">
+                            <span>{{element.updated_at | date:'medium' }}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef class="actions"> Actions </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;" class="actions">
+                            <button class="primary-action-buttons" color="primary" mat-icon-button
+                                matTooltip="View detail" (click)="viewDetail(element)"
+                                aria-label="View detail">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                </mat-table>
+            </div>
+        </div>
+
+        <div class="no-record-table" *ngIf="!isLoading && itemsDevicesLength === 0">
+            <span>No devices found.</span>
+        </div>
+
+        <div class="spinner-container" *ngIf="isLoading">
+            <mat-spinner class="loading-spinner"></mat-spinner>
+        </div>
+
+        <div class="datatable-footer" [hidden]="isLoading">
+            <mat-paginator [length]="itemsDevicesLength" (page)="setPaginatorValue($event)"
+                [pageSize]="paginatorValue.pageSize" [pageIndex]="paginatorValue.pageIndex"
+                [pageSizeOptions]="devicesPageOptions" [showFirstLastButtons]="true"></mat-paginator>
+        </div>
+
+    </div>
+</div>

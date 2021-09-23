@@ -1,0 +1,122 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+$primary: #3f51b5;
+$text-color-header: #ffffff;
+$warn: #CC1F1F;
+
+.main-container{
+    padding: 20px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.fixActionRow {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.data-table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    margin-bottom: 10px;
+  }
+  
+.data-table-header {
+    min-height: 64px;
+    padding: 0 24px;
+}
+
+.filters-panel-inner {
+    padding: 15px;
+    padding-top: 0px;
+}
+
+.no-record-table {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    background-color: $text-color-header;
+    font-size: 16px;
+}
+
+.actions {
+    flex: .6;
+    width: auto;
+    max-width: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+button.primary-action-buttons {
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    font-size: 20px;
+}
+
+.datatable-footer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    background: #fff;
+    padding: 0px 15px;
+}
+
+.custom-overlay-pane-class {
+    width: 100%;
+    max-width: 800px;
+    max-width: 100% !important;
+    min-height: 150px;
+    & .mat-dialog-container {
+      padding: 0;
+      & .mat-toolbar {
+        margin: 10;
+      }
+      & .mat-dialog-content {
+        margin: 0;
+        padding: 16px;
+        max-height: 75vh;
+        min-height: 100px;
+      }
+      
+    }
+}
+
+.dialog-header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    background-color: $primary;
+    color: $text-color-header !important;
+}
+
+.no-overflow {
+    overflow: hidden;
+}
+
+.card-title {
+    font-size: 18px !important;
+    color: $primary;
+}
+
+.loading-spinner {
+    margin:0 auto;
+}
+  
+.spinner-container {
+    background:rgba(250,250,250,1);
+    height: 100%;
+    width: 100%;
+    display: block;
+}
+  
